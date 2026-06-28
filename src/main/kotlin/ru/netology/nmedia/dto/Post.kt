@@ -7,4 +7,7 @@ data class Post(
     val published: Long,
     val isLiked: Boolean,
     val likes: Int = 0,
+    val shares: Int = 0,
+    val views: Int = 0,
+    val videoUrl: String? = null
 )

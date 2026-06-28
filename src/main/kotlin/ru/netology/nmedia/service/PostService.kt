@@ -29,7 +29,10 @@ class PostService(private val repository: PostRepository) {
                 dto.copy(
                     likes = 0,
                     isLiked = false,
-                    published = OffsetDateTime.now().toEpochSecond()
+                    published = OffsetDateTime.now().toEpochSecond(),
+                    shares = 0,
+                    views = 0,
+                    videoUrl = null
                 )
             )
         )
@@ -58,6 +61,14 @@ class PostService(private val repository: PostRepository) {
         .apply {
             likes -= 1
             isLiked = false
+        }
+        .toDto()
+
+    fun shareById(id: Long): Post = repository
+        .findById(id)
+        .orElseThrow(::NotFoundException)
+        .apply {
+            shares += 1
         }
         .toDto()
 }

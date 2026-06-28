@@ -16,10 +16,25 @@ data class PostEntity(
     var published: Long,
     var isLiked: Boolean,
     var likes: Int = 0,
+    var shares: Int = 0,
+    var views: Int = 0,
+    var videoUrl: String? = null
 ) {
-    fun toDto() = Post(id, author, content, published, isLiked, likes)
+    fun toDto() = Post(id, author, content, published, isLiked, likes, shares, views, videoUrl)
 
     companion object {
-        fun fromDto(dto: Post) = PostEntity(dto.id, dto.author, dto.content, dto.published, dto.isLiked, dto.likes)
+        fun fromDto(dto: Post): PostEntity {
+            return PostEntity(
+                dto.id,
+                dto.author,
+                dto.content,
+                dto.published,
+                dto.isLiked,
+                dto.likes,
+                dto.shares,
+                dto.views,
+                dto.videoUrl
+            )
+        }
     }
 }

@@ -27,12 +27,7 @@ class PostService(private val repository: PostRepository) {
         .orElse(
             PostEntity.fromDto(
                 dto.copy(
-                    likes = 0,
-                    isLiked = false,
-                    published = OffsetDateTime.now().toEpochSecond(),
-                    shares = 0,
-                    views = 0,
-                    videoUrl = null
+                    published = OffsetDateTime.now().toEpochSecond()
                 )
             )
         )
@@ -51,7 +46,7 @@ class PostService(private val repository: PostRepository) {
         .orElseThrow(::NotFoundException)
         .apply {
             likes += 1
-            isLiked = true
+            likedByMe = true
         }
         .toDto()
 
@@ -60,7 +55,7 @@ class PostService(private val repository: PostRepository) {
         .orElseThrow(::NotFoundException)
         .apply {
             likes -= 1
-            isLiked = false
+            likedByMe = false
         }
         .toDto()
 

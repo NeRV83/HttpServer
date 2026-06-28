@@ -14,13 +14,13 @@ data class PostEntity(
     @Column(columnDefinition = "TEXT")
     var content: String,
     var published: Long,
-    var isLiked: Boolean,
+    var likedByMe: Boolean,
     var likes: Int = 0,
     var shares: Int = 0,
     var views: Int = 0,
     var videoUrl: String? = null
 ) {
-    fun toDto() = Post(id, author, content, published, isLiked, likes, shares, views, videoUrl)
+    fun toDto() = Post(id, author, content, published, likedByMe, likes, shares, views, videoUrl)
 
     companion object {
         fun fromDto(dto: Post): PostEntity {
@@ -29,7 +29,7 @@ data class PostEntity(
                 dto.author,
                 dto.content,
                 dto.published,
-                dto.isLiked,
+                dto.likedByMe,
                 dto.likes,
                 dto.shares,
                 dto.views,

@@ -1,11 +1,9 @@
 package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Post
-import jakarta.persistence.Column
-import jakarta.persistence.Id
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
+import jakarta.persistence.*
+import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.enumeration.AttachmentType
 
 @Entity
 data class PostEntity(
@@ -19,7 +17,9 @@ data class PostEntity(
     var shares: Int = 0,
     var views: Int = 0,
 	var authorAvatar: String? = null,
-    var videoUrl: String? = null
+    var videoUrl: String? = null,
+    @Embedded
+    var attachment: AttachmentEmbeddable?
 ) {
     fun toDto() = Post(
 		id = id,
@@ -31,7 +31,9 @@ data class PostEntity(
 		likes = likes, 
 		shares = shares, 
 		views = views, 
-		videoUrl = videoUrl)
+		videoUrl = videoUrl,
+        attachment = attachment?.toDto()
+    )
 
     companion object {
         fun fromDto(dto: Post)= PostEntity(
@@ -44,7 +46,25 @@ data class PostEntity(
             likes = dto.likes,
             shares = dto.shares,
             views = dto.views,
-            videoUrl = dto.videoUrl
+            videoUrl = dto.videoUrl,
+            attachment = AttachmentEmbeddable.fromDto(dto.attachment)
         )
+    }
+}
+
+@Embeddable
+data class AttachmentEmbeddable(
+    var url: String,
+    @Column(columnDefinition = "TEXT")
+    var description: String?,
+    @Enumerated(EnumType.STRING)
+    var type: AttachmentType,
+) {
+    fun toDto() = Attachment(url, description, type)
+
+    companion object {
+        fun fromDto(dto: Attachment?) = dto?.let {
+            AttachmentEmbeddable(it.url, it.description, it.type)
+        }
     }
 }

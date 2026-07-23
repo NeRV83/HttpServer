@@ -4,17 +4,21 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.scheduling.annotation.EnableScheduling
 import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.Comment
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
+import ru.netology.nmedia.service.CommentService
 import ru.netology.nmedia.service.PostService
 
+@EnableScheduling
 @SpringBootApplication
 class NMediaApplication {
     @Bean
-    fun runner(service: PostService) = CommandLineRunner {
-        with(service) {
-            save(
+    fun runner(postService: PostService, commentService: CommentService) = CommandLineRunner {
+
+        val firstPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Netology",
@@ -25,7 +29,7 @@ class NMediaApplication {
                     likes = 0,
                 )
             )
-            save(
+        val secondPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Сбер",
@@ -36,7 +40,7 @@ class NMediaApplication {
                     likes = 0,
                 )
             )
-            save(
+        val thirdPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Тинькофф",
@@ -47,7 +51,7 @@ class NMediaApplication {
                     likes = 0,
                 )
             )
-            save(
+        val fourthPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Netology",
@@ -63,7 +67,7 @@ class NMediaApplication {
                     ),
                 )
             )
-            save(
+        val fifthPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Сбер",
@@ -79,7 +83,7 @@ class NMediaApplication {
                     ),
                 )
             )
-            save(
+        val sixthPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Me",
@@ -96,7 +100,7 @@ class NMediaApplication {
                     ),
                 )
             )
-            save(
+        val seventhPost = postService.saveInitial(
                 Post(
                     id = 0,
                     author = "Me",
@@ -106,6 +110,45 @@ class NMediaApplication {
                     likedByMe = true,
                     likes = 6,
                     videoUrl = "https://rutube.ru/video/fd12c2d55ba1e964284399c5cd1bfe5b/",
+                )
+            )
+
+
+        with(commentService) {
+            saveInitial(
+                Comment(
+                    id = 0,
+                    postId = firstPost.id,
+                    author = "Netology",
+                    authorAvatar = "netology.jpg",
+                    content = "Отлично!",
+                    published = 0,
+                    likedByMe = false,
+                    likes = 0,
+                )
+            )
+            saveInitial(
+                Comment(
+                    id = 0,
+                    postId = firstPost.id,
+                    author = "Сбер",
+                    authorAvatar = "sber.jpg",
+                    content = "Мы тоже обновились!",
+                    published = 0,
+                    likedByMe = false,
+                    likes = 0,
+                )
+            )
+            saveInitial(
+                Comment(
+                    id = 0,
+                    postId = secondPost.id,
+                    author = "Netology",
+                    authorAvatar = "netology.jpg",
+                    content = "Новый логотип прекрасен!",
+                    published = 0,
+                    likedByMe = false,
+                    likes = 0,
                 )
             )
         }

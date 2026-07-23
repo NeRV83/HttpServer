@@ -27,18 +27,18 @@ class AppWebMvcConfigurer : WebMvcConfigurer {
                 return true
             }
         })
-        registry.addInterceptor(object : HandlerInterceptor {
-            override fun preHandle(
-                request: HttpServletRequest,
-                response: HttpServletResponse,
-                handler: Any
-            ): Boolean {
-                if (Math.random() > 0.5) {
-                    throw InternalServerError()
-                }
-                return true
-            }
-        })
+//        registry.addInterceptor(object : HandlerInterceptor {
+//            override fun preHandle(
+//                request: HttpServletRequest,
+//                response: HttpServletResponse,
+//                handler: Any
+//            ): Boolean {
+//                if (Math.random() > 0.5) {
+//                    throw InternalServerError()
+//                }
+//                return true
+//            }
+//        })
     }
 }
 

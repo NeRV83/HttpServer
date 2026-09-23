@@ -8,27 +8,29 @@ import ru.netology.nmedia.enumeration.AttachmentType
 @Entity
 data class PostEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long,
-    var author: String,
+    @ManyToOne
+    var author: UserEntity,
     @Column(columnDefinition = "TEXT")
     var content: String,
     var published: Long,
-    var likedByMe: Boolean,
-    var likes: Int = 0,
+    @ElementCollection
+    var likeOwnerIds: MutableSet<Long> = mutableSetOf(),
     var shares: Int = 0,
     var views: Int = 0,
-	var authorAvatar: String? = null,
     var videoUrl: String? = null,
     @Embedded
     var attachment: AttachmentEmbeddable?
 ) {
-    fun toDto() = Post(
+    fun toDto(myId: Long) = Post(
 		id = id,
-		author = author,
-		authorAvatar = authorAvatar,
+        authorId = author.id,
+        author = author.name,
+        authorAvatar = author.avatar,
 		content = content, 
-		published = published, 
-		likedByMe = likedByMe, 
-		likes = likes, 
+		published = published,
+        likedByMe = likeOwnerIds.contains(myId),
+        ownedByMe = author.id == myId,
+        likes = likeOwnerIds.size,
 		shares = shares, 
 		views = views, 
 		videoUrl = videoUrl,
@@ -38,12 +40,10 @@ data class PostEntity(
     companion object {
         fun fromDto(dto: Post)= PostEntity(
             id = dto.id,
-            author = dto.author,
-            authorAvatar = dto.authorAvatar,
+            author = UserEntity(dto.authorId),
             content = dto.content,
             published = dto.published,
-            likedByMe = dto.likedByMe,
-            likes = dto.likes,
+            likeOwnerIds = mutableSetOf(),
             shares = dto.shares,
             views = dto.views,
             videoUrl = dto.videoUrl,

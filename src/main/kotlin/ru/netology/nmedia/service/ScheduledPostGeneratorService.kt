@@ -5,19 +5,24 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.Post
 import java.time.OffsetDateTime
+import jakarta.transaction.Transactional
 
 @Service
 class ScheduledPostGeneratorService(
+    private val userService: UserService,
     private val postService: PostService,
 ) {
     private val faker = Faker()
-    @Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(initialDelay = 1000, fixedRate = 1000)
     fun generate() {
+        val user = userService.getByLogin("student") ?: return
+
         postService.saveInitial(
             Post(
                 id = 0,
-                author = "Game of Thrones",
-                authorAvatar = "got.jpg",
+                authorId = user.id,
+                author = user.name,
+                authorAvatar = user.avatar,
                 content = faker.gameOfThrones().quote(),
                 published = OffsetDateTime.now().toEpochSecond(),
                 likedByMe = false,
